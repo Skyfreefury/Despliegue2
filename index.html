@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Qué hacemos con el solar? · Consulta vecinal de Benimaclet</title>
+<meta name="description" content="Consulta abierta de la asociación vecinal sobre el uso del solar de la calle Murta.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=Archivo+Narrow:wght@700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --papel:#f2f0ea; --negro:#141414; --gris:#6a6862; --linea:#c9c6bd;
+    --senal:#ff5a1f; --senal-osc:#c23d0a; --azul:#1f4bd8; --ok:#1d7a46;
+    --sans:"Archivo", system-ui, sans-serif;
+    --narrow:"Archivo Narrow", "Archivo", sans-serif;
+    --mono:"IBM Plex Mono", ui-monospace, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:var(--papel);color:var(--negro);line-height:1.5;font-size:16px}
+  button,input,textarea,select{font:inherit;color:inherit}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px}
+
+  /* Cabecera tipo cartel */
+  .franja{background:var(--negro);color:var(--papel);font-family:var(--mono);font-size:12.5px}
+  .franja .wrap{display:flex;justify-content:space-between;gap:12px;padding-top:9px;padding-bottom:9px;flex-wrap:wrap}
+  .franja b{color:var(--senal);font-weight:500}
+  .cartel{border-bottom:3px solid var(--negro);padding:44px 0 36px}
+  .cartel .kicker{font-family:var(--mono);font-size:13px;text-transform:uppercase;letter-spacing:.1em}
+  .cartel h1{font-family:var(--narrow);font-weight:700;text-transform:uppercase;font-size:clamp(48px,11vw,124px);line-height:.88;letter-spacing:-.01em;margin:16px 0 22px}
+  .cartel h1 span{background:var(--senal);padding:0 .08em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  .cartel .datos{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));border-top:1px solid var(--negro);padding-top:18px}
+  .dato .n{font-family:var(--narrow);font-size:38px;line-height:1}
+  .dato .t{font-size:13.5px;color:var(--gris)}
+  .lead{font-size:18px;max-width:60ch;margin-bottom:28px}
+
+  /* Plano del solar */
+  .plano{display:grid;gap:28px;padding-top:40px;padding-bottom:40px;border-bottom:1px solid var(--linea)}
+  .plano svg{width:100%;height:auto;border:1.5px solid var(--negro);background:#fff}
+  .plano h2{font-size:22px;font-weight:900;margin-bottom:10px}
+  .plano ul{list-style:none;display:grid;gap:8px;font-size:15px}
+  .plano li{display:flex;gap:10px}
+  .plano li b{font-family:var(--mono);font-weight:500;min-width:86px;color:var(--gris);font-size:13px;padding-top:2px}
+  @media(min-width:800px){.plano{grid-template-columns:1.2fr 1fr;align-items:center}}
+
+  /* Formulario por pasos */
+  .encuesta{padding-top:48px;padding-bottom:64px}
+  .progreso{display:flex;gap:6px;margin-bottom:10px}
+  .progreso span{flex:1;height:8px;background:var(--linea)}
+  .progreso span.hecho{background:var(--negro)}
+  .progreso span.actual{background:var(--senal)}
+  .contador{font-family:var(--mono);font-size:13px;color:var(--gris);margin-bottom:28px}
+  .paso{display:none;border:2px solid var(--negro);background:#fff;padding:28px clamp(18px,4vw,40px)}
+  .paso.activo{display:block;animation:entra .25s ease}
+  @keyframes entra{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .paso legend{float:left;width:100%;padding:0}
+  .paso legend + *{clear:both}
+  .paso legend,.paso h2{font-size:clamp(22px,3.4vw,30px);font-weight:900;line-height:1.15;margin-bottom:6px}
+  .paso .ayuda{color:var(--gris);font-size:15px;margin-bottom:22px}
+  fieldset{border:none}
+
+  .opciones{display:grid;gap:10px}
+  .opciones.dos{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .op{position:relative}
+  .op input{position:absolute;opacity:0}
+  .op label{display:flex;gap:14px;align-items:flex-start;border:1.5px solid var(--linea);padding:14px 16px;cursor:pointer;transition:border-color .12s, background .12s;min-height:56px}
+  .op label:hover{border-color:var(--negro)}
+  .op .marca{flex:none;width:22px;height:22px;border:2px solid var(--negro);margin-top:1px;display:grid;place-items:center}
+  .op input[type=radio] + label .marca{border-radius:50%}
+  .op input:checked + label{border-color:var(--negro);background:#fff3ec;box-shadow:4px 4px 0 var(--negro)}
+  .op input:checked + label .marca{background:var(--senal)}
+  .op input:focus-visible + label{outline:3px solid var(--azul);outline-offset:2px}
+  .op strong{display:block;font-weight:700}
+  .op small{color:var(--gris);font-size:14px}
+  .op input:disabled + label{opacity:.45;cursor:not-allowed}
+
+  .escala{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:6px}
+  .escala .op label{flex-direction:column;align-items:center;text-align:center;gap:6px;padding:14px 6px;font-family:var(--narrow);font-size:28px}
+  .escala .op label .marca{display:none}
+  .extremos{display:flex;justify-content:space-between;font-size:13px;color:var(--gris);margin-top:8px}
+
+  .campo{display:grid;gap:6px;margin-bottom:18px}
+  .campo label{font-weight:700;font-size:15px}
+  .campo input,.campo textarea,.campo select{border:1.5px solid var(--negro);padding:12px 14px;background:var(--papel);width:100%}
+  .campo textarea{min-height:120px;resize:vertical}
+  .campo .cuenta{font-family:var(--mono);font-size:12px;color:var(--gris);text-align:right}
+  .check-legal{display:flex;gap:10px;font-size:14px;color:var(--gris);align-items:flex-start}
+  .check-legal input{margin-top:4px;accent-color:var(--senal);width:18px;height:18px}
+
+  .error{display:none;margin-top:16px;padding:10px 14px;background:#ffe8e0;border-left:4px solid var(--senal-osc);color:var(--senal-osc);font-weight:500;font-size:14.5px}
+  .error.si{display:block}
+
+  .nav{display:flex;justify-content:space-between;gap:12px;margin-top:28px}
+  .boton{border:2px solid var(--negro);background:var(--negro);color:var(--papel);padding:13px 24px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:14px;cursor:pointer}
+  .boton:hover{background:var(--senal);border-color:var(--senal);color:var(--negro)}
+  .boton.sec{background:transparent;color:var(--negro)}
+  .boton.sec:hover{background:var(--negro);color:var(--papel)}
+  .boton[hidden]{display:none}
+  .boton:disabled{opacity:.5;cursor:wait}
+
+  /* Resultados */
+  .resultados{display:none;padding-top:48px;padding-bottom:64px}
+  .resultados.activo{display:block}
+  .gracias{border:2px solid var(--negro);background:var(--senal);padding:26px clamp(18px,4vw,36px);margin-bottom:36px}
+  .gracias h2{font-family:var(--narrow);text-transform:uppercase;font-size:clamp(34px,6vw,56px);line-height:.95}
+  .gracias p{margin-top:10px;font-weight:500;max-width:60ch}
+  .gracias code{font-family:var(--mono);background:var(--negro);color:var(--papel);padding:2px 8px}
+  .graf{margin-bottom:40px}
+  .graf h3{font-size:20px;font-weight:900;margin-bottom:4px}
+  .graf .sub{font-family:var(--mono);font-size:12.5px;color:var(--gris);margin-bottom:16px}
+  .barra{display:grid;grid-template-columns:minmax(120px,230px) 1fr 56px;gap:12px;align-items:center;margin-bottom:10px;font-size:15px}
+  .barra .pista{height:26px;background:#e3e0d7;position:relative}
+  .barra .relleno{position:absolute;inset:0 auto 0 0;background:var(--negro);width:0;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+  .barra.tuya .relleno{background:var(--senal)}
+  .barra.tuya .nombre{font-weight:700}
+  .barra .pct{font-family:var(--mono);font-size:14px;text-align:right}
+  .leyenda{display:flex;gap:18px;font-size:13px;color:var(--gris);margin-bottom:18px}
+  .leyenda i{display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-1px}
+  @media(max-width:560px){.barra{grid-template-columns:1fr 48px}.barra .nombre{grid-column:1 / -1}}
+
+  footer{border-top:3px solid var(--negro);padding:26px 0 40px;font-size:13.5px;color:var(--gris)}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+  .reiniciar{background:none;border:none;text-decoration:underline;color:var(--gris);cursor:pointer;font-size:13.5px}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="franja"><div class="wrap"><span>Associació Veïnal de Benimaclet</span><span>Consulta abierta · <b id="diasRestantes">cierra pronto</b></span></div></div>
+
+<header class="cartel">
+  <div class="wrap">
+    <span class="kicker">Consulta vecinal nº 7 · Solar de la calle Murta</span>
+    <h1>¿Qué <span>hacemos</span> con el solar?</h1>
+    <p class="lead">El Ayuntamiento cede durante 4 años los 1.380 m² vacíos entre Murta y Reverend Rafael Tramoyeres. La asociación llevará al pleno lo que salga de esta consulta. Son 5 preguntas y unos 2 minutos.</p>
+    <div class="datos">
+      <div class="dato"><div class="n" id="totalPart">412</div><div class="t">vecinos han respondido</div></div>
+      <div class="dato"><div class="n">1.380 m²</div><div class="t">de superficie, vallados desde 2011</div></div>
+      <div class="dato"><div class="n">48.000 €</div><div class="t">de presupuesto para el primer año</div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap plano">
+    <svg viewBox="0 0 400 240" role="img" aria-label="Plano esquemático del solar entre las calles Murta y Tramoyeres">
+      <rect x="0" y="0" width="400" height="240" fill="#fff"/>
+      <rect x="0" y="0" width="400" height="34" fill="#e3e0d7"/>
+      <text x="12" y="22" font-family="IBM Plex Mono" font-size="11" fill="#141414">C/ MURTA</text>
+      <rect x="0" y="206" width="400" height="34" fill="#e3e0d7"/>
+      <text x="12" y="228" font-family="IBM Plex Mono" font-size="11" fill="#141414">C/ REV. RAFAEL TRAMOYERES</text>
+      <rect x="40" y="50" width="250" height="140" fill="#fff3ec" stroke="#ff5a1f" stroke-width="2.5" stroke-dasharray="7 5"/>
+      <text x="165" y="118" text-anchor="middle" font-family="Archivo Narrow" font-weight="700" font-size="22" fill="#141414">SOLAR</text>
+      <text x="165" y="138" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6a6862">1.380 m²</text>
+      <rect x="306" y="50" width="78" height="140" fill="#d6d3c9"/>
+      <text x="345" y="116" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#141414">CEIP</text>
+      <text x="345" y="130" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#141414">Benimaclet</text>
+      <circle cx="56" cy="64" r="5" fill="#1f4bd8"/>
+      <text x="66" y="68" font-family="IBM Plex Mono" font-size="9.5" fill="#1f4bd8">acceso actual</text>
+    </svg>
+    <div>
+      <h2>Lo que hay que saber</h2>
+      <ul>
+        <li><b>Linda con</b> el colegio público, así que el uso de mañana importa.</li>
+        <li><b>Suelo</b> de tierra compactada, sin arbolado ni agua corriente.</li>
+        <li><b>Plazo</b> de cesión de 4 años, prorrogable.</li>
+        <li><b>Quién vota</b> cualquier persona que viva, trabaje o estudie en el barrio.</li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="encuesta wrap" id="encuesta" aria-live="polite">
+    <div class="progreso" id="progreso" aria-hidden="true"></div>
+    <p class="contador" id="contador"></p>
+
+    <form id="form" novalidate>
+      <!-- Paso 1 -->
+      <fieldset class="paso activo" data-paso="1">
+        <legend>¿Cuál es tu relación con Benimaclet?</legend>
+        <p class="ayuda">Nos sirve para saber si estamos oyendo a todo el barrio.</p>
+        <div class="opciones">
+          <div class="op"><input type="radio" name="relacion" id="r1" value="vivo"><label for="r1"><span class="marca"></span><span><strong>Vivo aquí</strong><small>Empadronado o de alquiler, da igual.</small></span></label></div>
+          <div class="op"><input type="radio" name="relacion" id="r2" value="trabajo"><label for="r2"><span class="marca"></span><span><strong>Trabajo aquí</strong><small>Comercio, taller, oficina o colegio.</small></span></label></div>
+          <div class="op"><input type="radio" name="relacion" id="r3" value="estudio"><label for="r3"><span class="marca"></span><span><strong>Estudio aquí</strong><small>O llevo a mis hijos al cole de al lado.</small></span></label></div>
+          <div class="op"><input type="radio" name="relacion" id="r4" value="paso"><label for="r4"><span class="marca"></span><span><strong>Paso a menudo</strong><small>Vengo a comprar, a quedar o al mercado.</small></span></label></div>
+        </div>
+      </fieldset>
+
+      <!-- Paso 2 -->
+      <fieldset class="paso" data-paso="2">
+        <legend>¿Qué te gustaría ver en el solar?</legend>
+        <p class="ayuda">Elige hasta <b>2 opciones</b>. Si todo es prioritario, nada lo es.</p>
+        <div class="opciones dos" id="usos"></div>
+      </fieldset>
+
+      <!-- Paso 3 -->
+      <fieldset class="paso" data-paso="3">
+        <legend>¿Cuándo lo usarías tú?</legend>
+        <p class="ayuda">Marca la franja en la que más te acercarías.</p>
+        <div class="opciones dos">
+          <div class="op"><input type="radio" name="franja" id="f1" value="manana"><label for="f1"><span class="marca"></span><span><strong>Mañanas entre semana</strong><small>9:00 a 14:00</small></span></label></div>
+          <div class="op"><input type="radio" name="franja" id="f2" value="tarde"><label for="f2"><span class="marca"></span><span><strong>Tardes entre semana</strong><small>17:00 a 21:00</small></span></label></div>
+          <div class="op"><input type="radio" name="franja" id="f3" value="finde"><label for="f3"><span class="marca"></span><span><strong>Fines de semana</strong><small>Cualquier hora</small></span></label></div>
+          <div class="op"><input type="radio" name="franja" id="f4" value="nunca"><label for="f4"><span class="marca"></span><span><strong>Probablemente no lo usaría</strong><small>Pero me importa lo que se haga</small></span></label></div>
+        </div>
+      </fieldset>
+
+      <!-- Paso 4 -->
+      <fieldset class="paso" data-paso="4">
+        <legend>¿Cuánto te preocupa el ruido por la noche?</legend>
+        <p class="ayuda">Hay 34 viviendas con ventanas al solar.</p>
+        <div class="escala" id="escala"></div>
+        <div class="extremos"><span>1 · Nada</span><span>5 · Muchísimo</span></div>
+      </fieldset>
+
+      <!-- Paso 5 -->
+      <fieldset class="paso" data-paso="5">
+        <legend>Último paso</legend>
+        <p class="ayuda">El comentario es opcional, pero lo leemos todo en la asamblea del jueves.</p>
+        <div class="campo">
+          <label for="cp">Código postal</label>
+          <input id="cp" name="cp" inputmode="numeric" maxlength="5" placeholder="46020" autocomplete="postal-code">
+        </div>
+        <div class="campo">
+          <label for="comentario">¿Algo que debamos tener en cuenta?</label>
+          <textarea id="comentario" name="comentario" maxlength="400" placeholder="Por ejemplo: que tenga sombra, que no se llene de coches, que haya fuente…"></textarea>
+          <span class="cuenta" id="cuenta">0 / 400</span>
+        </div>
+        <label class="check-legal"><input type="checkbox" id="acepto"> <span>Entiendo que mi respuesta es anónima y que solo se publicarán los totales.</span></label>
+      </fieldset>
+
+      <p class="error" id="error" role="alert"></p>
+
+      <div class="nav">
+        <button type="button" class="boton sec" id="atras" hidden>← Atrás</button>
+        <button type="button" class="boton" id="siguiente">Siguiente →</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="resultados wrap" id="resultados">
+    <div class="gracias">
+      <h2>Voto registrado</h2>
+      <p>Tu código de participación es <code id="codigo">—</code>. Guárdalo si quieres comprobarlo en el acta. Así va el recuento hasta ahora:</p>
+    </div>
+    <div class="leyenda"><span><i style="background:var(--senal)"></i>Tu elección</span><span><i style="background:var(--negro)"></i>Resto</span></div>
+    <div class="graf"><h3>Usos preferidos</h3><p class="sub" id="subUsos"></p><div id="grafUsos"></div></div>
+    <div class="graf"><h3>Franja de uso</h3><p class="sub">Porcentaje de participantes</p><div id="grafFranja"></div></div>
+    <div class="graf"><h3>Preocupación por el ruido nocturno</h3><p class="sub" id="subRuido"></p><div id="grafRuido"></div></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Associació Veïnal de Benimaclet · Proyecto de clase, consulta ficticia</span>
+    <button class="reiniciar" id="reiniciar">Borrar mi voto de este navegador</button>
+  </div>
+</footer>
+
+<script>
+const USOS = [
+  {v:"huerto", t:"Huerto urbano", d:"Parcelas para vecinos y para el cole."},
+  {v:"juegos", t:"Zona de juegos", d:"Columpios y arenero con sombra."},
+  {v:"deporte", t:"Pista deportiva", d:"Baloncesto y fútbol sala."},
+  {v:"mercado", t:"Mercadillo de sábado", d:"Productores de l'Horta Nord."},
+  {v:"cine", t:"Cine y conciertos de verano", d:"Escenario desmontable."},
+  {v:"aparca", t:"Aparcamiento de bicis y patinetes", d:"Cubierto y vigilado."},
+];
+const FRANJAS = {manana:"Mañanas", tarde:"Tardes", finde:"Fines de semana", nunca:"No lo usaría"};
+
+// Recuento base (respuestas previas de la consulta)
+const BASE = {
+  total: 412,
+  usos: {huerto:198, juegos:171, deporte:96, mercado:142, cine:117, aparca:38},
+  franja: {manana:61, tarde:139, finde:174, nunca:38},
+  ruido: [44, 58, 97, 121, 92],
+};
+
+const leer = () => { try { return JSON.parse(localStorage.getItem("solar-voto")); } catch(e) { return null; } };
+const escribir = v => { try { localStorage.setItem("solar-voto", JSON.stringify(v)); } catch(e) {} };
+
+// Construir opciones dinámicas
+document.getElementById("usos").innerHTML = USOS.map((u,i)=>`
+  <div class="op"><input type="checkbox" name="uso" id="u${i}" value="${u.v}"><label for="u${i}"><span class="marca"></span><span><strong>${u.t}</strong><small>${u.d}</small></span></label></div>`).join("");
+document.getElementById("escala").innerHTML = [1,2,3,4,5].map(n=>`
+  <div class="op"><input type="radio" name="ruido" id="n${n}" value="${n}"><label for="n${n}"><span class="marca"></span>${n}</label></div>`).join("");
+
+// Máximo 2 usos
+const checksUso = [...document.querySelectorAll('input[name="uso"]')];
+checksUso.forEach(c => c.addEventListener("change", () => {
+  const n = checksUso.filter(x=>x.checked).length;
+  checksUso.forEach(x => { if(!x.checked) x.disabled = n>=2; });
+  ocultarError();
+}));
+
+// Navegación por pasos
+const pasos = [...document.querySelectorAll(".paso")];
+const TOTAL = pasos.length;
+let actual = 1;
+const prog = document.getElementById("progreso");
+prog.innerHTML = pasos.map(()=>"<span></span>").join("");
+
+function mostrar(n){
+  actual = n;
+  pasos.forEach(p => p.classList.toggle("activo", Number(p.dataset.paso)===n));
+  [...prog.children].forEach((s,i)=>{ s.className = i+1<n ? "hecho" : i+1===n ? "actual" : ""; });
+  document.getElementById("contador").textContent = `Pregunta ${n} de ${TOTAL}`;
+  document.getElementById("atras").hidden = n===1;
+  document.getElementById("siguiente").textContent = n===TOTAL ? "Enviar respuesta" : "Siguiente →";
+  ocultarError();
+}
+
+const errorEl = document.getElementById("error");
+const mostrarError = t => { errorEl.textContent = t; errorEl.classList.add("si"); };
+const ocultarError = () => errorEl.classList.remove("si");
+const valor = name => (document.querySelector(`input[name="${name}"]:checked`)||{}).value;
+
+function validar(n){
+  if(n===1 && !valor("relacion")) return "Elige una opción para seguir.";
+  if(n===2 && !checksUso.some(c=>c.checked)) return "Marca al menos un uso (máximo dos).";
+  if(n===3 && !valor("franja")) return "Elige una franja, aunque sea «no lo usaría».";
+  if(n===4 && !valor("ruido")) return "Elige un número del 1 al 5.";
+  if(n===5){
+    const cp = document.getElementById("cp").value.trim();
+    if(!/^46\d{3}$/.test(cp)) return "El código postal debe ser de Valencia: 5 cifras que empiezan por 46.";
+    if(!document.getElementById("acepto").checked) return "Marca la casilla de privacidad para enviar.";
+  }
+  return "";
+}
+
+document.getElementById("siguiente").addEventListener("click", () => {
+  const e = validar(actual);
+  if(e) return mostrarError(e);
+  if(actual < TOTAL) return mostrar(actual+1);
+  enviar();
+});
+document.getElementById("atras").addEventListener("click", () => mostrar(actual-1));
+document.getElementById("form").addEventListener("change", ocultarError);
+document.getElementById("form").addEventListener("submit", e => e.preventDefault());
+
+const coment = document.getElementById("comentario");
+coment.addEventListener("input", () => document.getElementById("cuenta").textContent = `${coment.value.length} / 400`);
+document.getElementById("cp").addEventListener("input", e => e.target.value = e.target.value.replace(/\D/g,""));
+
+function enviar(){
+  const btn = document.getElementById("siguiente");
+  btn.disabled = true; btn.textContent = "Enviando…";
+  const voto = {
+    relacion: valor("relacion"),
+    usos: checksUso.filter(c=>c.checked).map(c=>c.value),
+    franja: valor("franja"),
+    ruido: Number(valor("ruido")),
+    codigo: "BM7-" + Math.random().toString(36).slice(2,7).toUpperCase(),
+  };
+  setTimeout(() => { escribir(voto); btn.disabled = false; verResultados(voto); }, 700);
+}
+
+function barras(contenedor, filas, total){
+  const max = Math.max(...filas.map(f=>f.n));
+  document.getElementById(contenedor).innerHTML = filas.map(f=>`
+    <div class="barra ${f.tuya?"tuya":""}">
+      <span class="nombre">${f.t}</span>
+      <div class="pista"><div class="relleno" data-w="${(f.n/max*100).toFixed(1)}"></div></div>
+      <span class="pct">${Math.round(f.n/total*100)}%</span>
+    </div>`).join("");
+}
+
+function verResultados(voto, desplazar=true){
+  const total = BASE.total + 1;
+  const usos = {...BASE.usos}; voto.usos.forEach(u=>usos[u]++);
+  const franja = {...BASE.franja}; franja[voto.franja]++;
+  const ruido = [...BASE.ruido]; ruido[voto.ruido-1]++;
+
+  barras("grafUsos", USOS.map(u=>({t:u.t, n:usos[u.v], tuya:voto.usos.includes(u.v)})).sort((a,b)=>b.n-a.n), total);
+  barras("grafFranja", Object.keys(FRANJAS).map(k=>({t:FRANJAS[k], n:franja[k], tuya:voto.franja===k})), total);
+  barras("grafRuido", ruido.map((n,i)=>({t:`${i+1} · ${["Nada","Poco","Algo","Bastante","Muchísimo"][i]}`, n, tuya:voto.ruido===i+1})), total);
+
+  const media = ruido.reduce((s,n,i)=>s+n*(i+1),0)/total;
+  document.getElementById("subUsos").textContent = `Cada persona podía elegir dos · ${total} participantes`;
+  document.getElementById("subRuido").textContent = `Media: ${media.toFixed(1).replace(".",",")} sobre 5`;
+  document.getElementById("codigo").textContent = voto.codigo;
+  document.getElementById("totalPart").textContent = total;
+
+  document.getElementById("encuesta").style.display = "none";
+  document.getElementById("resultados").classList.add("activo");
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.querySelectorAll(".relleno").forEach(r => r.style.width = r.dataset.w + "%");
+  }));
+  if(desplazar) document.getElementById("resultados").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+document.getElementById("reiniciar").addEventListener("click", () => {
+  try { localStorage.removeItem("solar-voto"); } catch(e) {}
+  location.reload();
+});
+
+// Días hasta el cierre (último día del mes en curso)
+const hoy = new Date();
+const cierre = new Date(hoy.getFullYear(), hoy.getMonth()+1, 0);
+const dias = Math.ceil((cierre - hoy) / 86400000);
+document.getElementById("diasRestantes").textContent = dias<=0 ? "cierra hoy" : `cierra en ${dias} día${dias===1?"":"s"}`;
+
+// Si ya votó en este navegador, enseñar resultados
+const previo = leer();
+if(previo) verResultados(previo, false); else mostrar(1);
+</script>
+</body>
+</html>
